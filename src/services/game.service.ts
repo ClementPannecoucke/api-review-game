@@ -39,6 +39,19 @@ export class GameService {
     }
     return notFound("Console")
   }
+
+  public async updateGame(
+    id: number,
+    title?: string,
+  ): Promise<Game | null> {
+    const game = await Game.findByPk(id);
+    if (game) {
+      if (title) game.title = title;
+      await game.save();
+      return game;
+    }
+    return notFound(`Game`)
+  }
 }
 
 export const gameService = new GameService();
