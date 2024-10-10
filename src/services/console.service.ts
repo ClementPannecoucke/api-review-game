@@ -46,7 +46,7 @@ export class ConsoleService {
       await console.save();
       return console;
     }
-    return notFound(`Console not found`)
+    return notFound(`Console`)
   }
 }
 
