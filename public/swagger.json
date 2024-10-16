@@ -49,6 +49,34 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ReviewDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"game": {
+						"$ref": "#/components/schemas/GameDTO"
+					},
+					"game_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"rating": {
+						"type": "number",
+						"format": "double"
+					},
+					"review_text": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"game_id"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -70,7 +98,12 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ReviewDTO"
+									},
+									"type": "array"
+								}
 							}
 						}
 					}
@@ -80,6 +113,43 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/reviews/{id}": {
+			"get": {
+				"operationId": "GetReviewById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/ReviewDTO"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reviews"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/games": {
