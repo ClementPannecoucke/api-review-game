@@ -4,6 +4,7 @@ import { Game } from "../models/game.model";
 import { Console } from "../models/console.model";
 import {notFound} from "../error/NotFoundError";
 import {badRequest} from "../error/BadRequestError";
+import {preconditionFailed} from "../error/PreconditionFailedError";
 
 export class ReviewService {
     public async getAllReviews(): Promise<ReviewDTO[]> {
@@ -88,6 +89,15 @@ export class ReviewService {
                 },
             ],
         });
+    }
+
+    public async deleteReview(id: number): Promise<void> {
+        const review = await Review.findByPk(id);
+        if (review){
+            await review.destroy();
+        } else {
+            notFound(id.toString());
+        }
     }
 }
 
