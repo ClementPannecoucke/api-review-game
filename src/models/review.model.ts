@@ -4,7 +4,7 @@ import { Game } from "./game.model";
 import { allow } from "joi";
 
 export interface ReviewAttributes {
-  id : number;
+  id? : number;
   game ?: Game
   game_id ?: number;
   rating ?: number;

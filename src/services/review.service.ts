@@ -3,15 +3,16 @@ import { Review } from "../models/review.model";
 import { Game } from "../models/game.model";
 import { Console } from "../models/console.model";
 import {notFound} from "../error/NotFoundError";
+import {badRequest} from "../error/BadRequestError";
 
 export class ReviewService {
-    public async getAllReviews() : Promise<ReviewDTO[]> {
+    public async getAllReviews(): Promise<ReviewDTO[]> {
         return Review.findAll({
             include: [
                 {
                     model: Game,
                     as: 'game',
-                    include:[
+                    include: [
                         {
                             model: Console,
                             as: 'console'
@@ -37,10 +38,20 @@ export class ReviewService {
                 }
             ]
         });
-        if(!review) {
+        if (!review) {
             notFound('Review');
         }
         return review;
+    }
+
+    public async createReview(review_text: string, rating: number, game_id: number | undefined): Promise<ReviewDTO> {
+        if (rating <= -1 || rating >= 11) {
+            badRequest('Rating must be between 0 and 10');
+        }
+        if (!game_id || !await Game.findByPk(game_id)) {
+            notFound('Game');
+        }
+        return Review.create({review_text : review_text, rating : rating, game_id: game_id});
     }
 }
 
